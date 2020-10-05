@@ -118,4 +118,3 @@ z1.altair_chart(alt.Chart(chart_data)
         opacity=0.5,
         color='red'
     ), use_container_width=True)
-        map(newark[0],newark[1], zoom_level)
