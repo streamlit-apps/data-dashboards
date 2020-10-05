@@ -4,9 +4,6 @@ import numpy as np
 import altair as alt
 import pydeck as pdk
 
-# SETTING PAGE CONFIG TO WIDE MODE
-st.beta_set_page_config(layout="wide")
-
 # LOADING DATA
 DATE_TIME = "date/time"
 DATA_URL = (
@@ -48,14 +45,11 @@ def map(data, lat, lon, zoom):
         ]
     ))
 
-# LAYING OUT THE TOP SECTION OF THE APP
-t0,t1, t2, t3, t4 = st.beta_columns((1,8,1,12,1))
+st.title("NYC Ridesharing Data")
 
-t1.title("NYC Ridesharing Data")
+hour_selected = st.slider("Select hour of pickup", 0, 23)
 
-hour_selected = t1.slider("Select hour of pickup", 0, 23)
-
-t3.write(
+st.write(
     """
     ##
     Examining how Uber pickups vary over time in New York City's and at its major regional airports.
@@ -65,8 +59,6 @@ t3.write(
 # FILTERING DATA BY HOUR SELECTED
 data = data[data[DATE_TIME].dt.hour == hour_selected]
 
-# LAYING OUT THE MIDDLE SECTION OF THE APP WITH THE MAPS
-c0, c1, c2, c3, c4, c5, c6 = st.beta_columns((1,8,1,4,4,4,1))
 
 # SETTING THE ZOOM LOCATIONS FOR THE AIRPORTS
 la_guardia= [40.7900, -73.8700]
@@ -75,21 +67,17 @@ newark = [40.7090, -74.1805]
 zoom_level = 12
 midpoint = (np.average(data["lat"]), np.average(data["lon"]))
 
-with c1:
-    st.write("**All New York City from %i:00 and %i:00**" % (hour_selected, (hour_selected + 1) % 24))
-    map(data, midpoint[0], midpoint[1], 11)
+st.write("**All New York City from %i:00 and %i:00**" % (hour_selected, (hour_selected + 1) % 24))
+map(data, midpoint[0], midpoint[1], 11)
 
-with c3:
-    st.write("**La Guardia Airport**")
-    map(data, la_guardia[0],la_guardia[1], zoom_level)
+st.write("**La Guardia Airport**")
+map(data, la_guardia[0],la_guardia[1], zoom_level)
 
-with c4:
-    st.write("**JFK Airport**")
-    map(data, jfk[0],jfk[1], zoom_level)
+st.write("**JFK Airport**")
+map(data, jfk[0],jfk[1], zoom_level)
 
-with c5:
-    st.write("**Newark Airport**")
-    map(data, newark[0],newark[1], zoom_level)
+st.write("**Newark Airport**")
+map(data, newark[0],newark[1], zoom_level)
 
 # FILTERING DATA FOR THE HISTOGRAM
 filtered = data[
