@@ -1,8 +1,28 @@
+# -*- coding: utf-8 -*-
+# Copyright 2018-2019 Streamlit Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""An example of showing geographic data."""
+
 import streamlit as st
 import pandas as pd
 import numpy as np
 import altair as alt
 import pydeck as pdk
+
+# SETTING PAGE CONFIG TO WIDE MODE
+st.beta_set_page_config(layout="wide")
 
 # LOADING DATA
 DATE_TIME = "date/time"
@@ -45,11 +65,15 @@ def map(data, lat, lon, zoom):
         ]
     ))
 
-st.title("NYC Ridesharing Data")
+# LAYING OUT THE TOP SECTION OF THE APP
+t0, t1, t2, t3, t4 = st.beta_columns((1,8,1,12,1))
 
-hour_selected = st.slider("Select hour of pickup", 0, 23)
+with t1:
+    st.title("NYC Ridesharing Data")
+    hour_selected = st.slider("Select hour of pickup", 0, 23)
 
-st.write(
+with t3:
+    st.write(
     """
     ##
     Examining how Uber pickups vary over time in New York City's and at its major regional airports.
@@ -59,6 +83,8 @@ st.write(
 # FILTERING DATA BY HOUR SELECTED
 data = data[data[DATE_TIME].dt.hour == hour_selected]
 
+# LAYING OUT THE MIDDLE SECTION OF THE APP WITH THE MAPS
+c0, c1, c2, c3, c4, c5, c6 = st.beta_columns((1,8,1,4,4,4,1))
 
 # SETTING THE ZOOM LOCATIONS FOR THE AIRPORTS
 la_guardia= [40.7900, -73.8700]
@@ -67,17 +93,21 @@ newark = [40.7090, -74.1805]
 zoom_level = 12
 midpoint = (np.average(data["lat"]), np.average(data["lon"]))
 
-st.write("**All New York City from %i:00 and %i:00**" % (hour_selected, (hour_selected + 1) % 24))
-map(data, midpoint[0], midpoint[1], 11)
+with c1:
+    st.write("**All New York City from %i:00 and %i:00**" % (hour_selected, (hour_selected + 1) % 24))
+    map(data, midpoint[0], midpoint[1], 11)
 
-st.write("**La Guardia Airport**")
-map(data, la_guardia[0],la_guardia[1], zoom_level)
+with c3:
+    st.write("**La Guardia Airport**")
+    map(data, la_guardia[0],la_guardia[1], zoom_level)
 
-st.write("**JFK Airport**")
-map(data, jfk[0],jfk[1], zoom_level)
+with c4:
+    st.write("**JFK Airport**")
+    map(data, jfk[0],jfk[1], zoom_level)
 
-st.write("**Newark Airport**")
-map(data, newark[0],newark[1], zoom_level)
+with c5:
+    st.write("**Newark Airport**")
+    map(data, newark[0],newark[1], zoom_level)
 
 # FILTERING DATA FOR THE HISTOGRAM
 filtered = data[
