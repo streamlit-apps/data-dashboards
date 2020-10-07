@@ -50,7 +50,7 @@ def map(data, lat, lon, zoom):
         ]
     ))
 
-# LAYING OUT THE TOP SECTION OF THE APP
+# LAYING OUT THE HEADER SECTION OF THE APP
 t0, t1, t2, t3, t4 = st.beta_columns((1,8,1,12,1))
 
 with t1:
